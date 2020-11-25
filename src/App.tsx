@@ -11,10 +11,14 @@ const App = () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/:category">
-            <h1>Listing page</h1>
+          <Route exact path="/">
+            <h1 className="title">Listing page</h1>
             <Buttons />
-            <Items />
+          </Route>
+          <Route exact path="/search">
+            <h1 className="title">Listing page</h1>
+            <Buttons />
+            <Items location={window.location}/>
           </Route>
         </Switch>
       </Router>

@@ -5,7 +5,7 @@ import './Buttons.css';
 const Buttons: React.FC = () => {
   return (
     <div className="Buttons">
-      <Button name="Jackets"/>
+      <Button name="Jackets" />
       <Button name="Shirts"/>
       <Button name="Accessories"/>
     </div>

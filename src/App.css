@@ -1,17 +1,8 @@
-.App {
+body {
   text-align: center;
+  background-color: #5aa469;
 }
 
-.item-container {
-  width: 100%;
-  margin-top: 20px;
-}
-
-.items {
-  height: 10%;
-  width: 70%;
-  border: 1px solid gray;
-  border-radius: 25px;
-  margin: auto;
-  margin-bottom: 20px;
+.App .title {
+  color: #f2d974;
 }
