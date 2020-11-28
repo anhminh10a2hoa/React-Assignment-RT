@@ -1,12 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import axios from "axios";
+import { loadAllProducts } from './api/api';
 import Buttons from './components/Buttons/Buttons';
 import Items from './components/Items/Items';
 
 
 import './App.css';
 
+let listOfProductsAndManufacturer: any = {};
+
 const App = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadAllProducts().then((res) => {
+      listOfProductsAndManufacturer = res;
+    }).then(() => {
+      setLoading(false);
+    })
+  })
+
   return (
     <div className="App">
       <Router>
@@ -15,10 +29,12 @@ const App = () => {
             <h1 className="title">Listing page</h1>
             <Buttons />
           </Route>
-          <Route exact path="/search">
-            <h1 className="title">Listing page</h1>
-            <Buttons />
-            <Items location={window.location}/>
+          <Route exact path="/:category">
+            {loading ? (<p>We need to load all of manufacturers first, please waiting...</p>) : (<React.Fragment>
+              <h1 className="title">Listing page</h1>
+              <Buttons />
+              <Items search={window.location.search} listOfProductsAndManufacturer={listOfProductsAndManufacturer}/>
+            </React.Fragment>)}
           </Route>
         </Switch>
       </Router>

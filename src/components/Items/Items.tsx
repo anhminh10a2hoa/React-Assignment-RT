@@ -5,29 +5,38 @@ import Item from './Item/Item';
 import './Items.css';
 
 type ItemsProps = {
-  location?: any;
+  search?: any;
+  listOfProductsAndManufacturer: any;
 }
-
+let listOfProducts: any = [];
 const Items: React.FC<ItemsProps> = (props) => {
-  const [items, setItems] = useState({} as any);
   const [loading, setLoading] = useState(true);
-  const [searchValue, setSearchValue] = useState(props.location.search.replace('?category=', ''));
+  const category: any = useParams();
 
   useEffect(() => {
-    setSearchValue(props.location.search.replace('?category=', ''));
     setLoading(true);
-    axios
-      .get(`https://bad-api-assignment.reaktor.com/products/${searchValue}`)
-      .then((response) => setItems(response.data))
+    axios.get(`https://bad-api-assignment.reaktor.com/products/${category.category}`)
+      .then((response) => {
+        response.data.map((p: any, i:number) => {
+          let itemManufacturer = props.listOfProductsAndManufacturer[p.manufacturer];
+          let datapayload = "";
+          let status = [];
+          datapayload = itemManufacturer.find(
+            (val: any) => val.id === p.id.toUpperCase()
+          )["DATAPAYLOAD"];
+          status = datapayload.split('INSTOCKVALUE>');
+          listOfProducts.push(<Item key={p.id} {...p} status={status[1].replace("</", "")} />)
+        })
+      })
       .then(() => setLoading(false))
-    }, [searchValue]
+    }, [category]
   );
 
   return (
     <React.Fragment>
       {loading ? (<p>It's loading...</p>) : (
         <div className="Items">
-          {items.map((item: any) => (<Item key={item.id} {...item}  />))}
+          {listOfProducts}
         </div>
       )}
     </React.Fragment>
