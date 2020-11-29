@@ -1,46 +1,79 @@
-# Getting Started with Create React App
+# React Assignment 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
++ Step 1: Create a function that saves all the manufacturers data
 
-## Available Scripts
+```javascript
+export async function loadAllManufacturers(){
+  // List of manufacturers
+  const manufacturers = ["abiplos", "derp", "nouke", "reps", "xoon"];
+  // Get all manufacturers data
+  for(let m of manufacturers){
+    let data = await axios.get(`https://bad-api-assignment.reaktor.com/availability/${m}`)
+    listOfProductsAndManufacturer = Object.assign(listOfProductsAndManufacturer, {
+      [m]: data.data.response
+    })
+    if(data.data.response === 0){
+      data = await axios.get(`https://bad-api-assignment.reaktor.com/availability/${m}`, {
+        headers: {
+          'x-force-error-mode': 'all'
+        }
+      })
+      listOfProductsAndManufacturer = Object.assign(listOfProductsAndManufacturer, {
+        [m]: data.data.response
+      })
+    }
+  }
+  return listOfProductsAndManufacturer;
+}
+```
 
-In the project directory, you can run:
++ Step 2: Get all of the products data when param changes then save it
++ Step 3: If the category products exist, don't need to call the api
 
-### `yarn start`
+```javascript
+if(listOfProductsByCategory[category]){
+  return listOfProductsByCategory[category]
+}
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
++ Step 4: Else, call the API and find the id of the product equal to id in the manufacturers
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```javascript
+valueOfProductInCategory = itemManufacturer.find(
+  (val: any) => val.id === p.id.toUpperCase()
+);
+```
 
-### `yarn test`
++ Step 5: Find the index of this product above and remove it from the manufacturer data, I think it makes the finding function faster the next time.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```javascript
+let index = itemManufacturer.indexOf(valueOfProductInCategory);
+// Delete this value and make the finding function loads faster next time
+itemManufacturer.splice(index, 1);
+```
 
-### `yarn build`
++ Step 6: Push to the products data array and assign it to the object with 3 key is the same with 3 categories of products
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```javascript
+listOfProducts.push({
+  id: p.id,
+  name: p.name,
+  color: p.color,
+  price: p.price,
+  manufacturer: p.manufacturer,
+  status: status[1].replace("</", "")
+})
+listOfProductsByCategory = Object.assign(listOfProductsByCategory, {
+  [category]: listOfProducts
+})
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
++ Step 7: If this object above has 3 categories then delete all of the manufacturer's data and minimize the Ram
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```javascript
+if(listOfProductsByCategory["shirts"] && listOfProductsByCategory["accessories"] && listOfProductsByCategory["jackets"]){
+  listOfProductsAndManufacturer = {};
+}
+```
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Author: Minh Hoang - anhminh10a2hoa@gmail.com

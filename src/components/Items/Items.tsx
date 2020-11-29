@@ -24,12 +24,16 @@ const Items: React.FC<ItemsProps> = (props) => {
 
   return (
     <React.Fragment>
-      {loading ? (<p>It's loading...</p>) : (
+      {(category.category == "jackets" || 
+      category.category == "shirts" || 
+      category.category == "accessories") ? loading ? (<p>It's loading...</p>) : (
         <div className="Items">
           {listOfProducts.map((p: any) => (
             <Item key={p.id} {...p} />
           ))}
         </div>
+      ) : (
+        <p>Does not exist this category</p>
       )}
     </React.Fragment>
   );
