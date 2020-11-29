@@ -8,20 +8,10 @@ export async function loadAllManufacturers(){
   const manufacturers = ["abiplos", "derp", "nouke", "reps", "xoon"];
   // Get all manufacturers data
   for(let m of manufacturers){
-    let data = await axios.get(`https://bad-api-assignment.reaktor.com/availability/${m}`)
-    listOfProductsAndManufacturer = Object.assign(listOfProductsAndManufacturer, {
-      [m]: data.data.response
-    })
-    if(data.data.response === 0){
-      data = await axios.get(`https://bad-api-assignment.reaktor.com/availability/${m}`, {
-        headers: {
-          'x-force-error-mode': 'all'
-        }
-      })
+      let data = await axios.get(`https://bad-api-assignment.reaktor.com/availability/${m}`)
       listOfProductsAndManufacturer = Object.assign(listOfProductsAndManufacturer, {
         [m]: data.data.response
       })
-    }
   }
   return listOfProductsAndManufacturer;
 }
